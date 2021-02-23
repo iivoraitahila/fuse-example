@@ -1,7 +1,6 @@
 package com.example.fuse.service.impl;
 
 import com.example.fuse.model.*;
-import com.redhat.examples.fuse.model.*;
 import com.example.fuse.service.OrderService;
 import org.springframework.stereotype.Service;
 
