@@ -1,6 +1,8 @@
 package com.example.fuse.model;
 
-public class OrderResponse {
+import java.io.Serializable;
+
+public class OrderResponse implements Serializable {
 
   private final Order order;
   private final boolean approved;

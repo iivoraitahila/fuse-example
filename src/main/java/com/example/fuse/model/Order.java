@@ -2,12 +2,13 @@ package com.example.fuse.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Order {
+public class Order implements Serializable {
 
   private final UUID id;
   private final List<OrderedProduct> products;

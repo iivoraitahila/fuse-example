@@ -36,25 +36,21 @@ public class InputRoute extends RouteBuilder {
         .id("order-place")
         .streamCaching()
         .to("bean:orderService?method=place")
-        .wireTap("direct:send-to-web-service")
+        .wireTap("activemq:orders")
         .to("mock:result");
 
-    from("direct:process-response")
+    from("activemq:responses")
         .id("callback")
         .log("Received response for order ${body.order.id}, approved: ${body.approved}");
 
-    from("direct:send-to-web-service")
+    from("activemq:orders")
         .id("web-service")
         // fancy stuff going on here
         .log("Sending order ${body.id} to web service")
-        .to("direct:send-callback");
-
-    from("direct:send-callback")
-        .id("response-creator")
         .delay(5000)
         .log("sending response regarding order ${body.id}")
         .to("bean:responseCreator?method=createResponse")
-        .to("direct:process-response");
+        .to("activemq:responses");
 
   }
 

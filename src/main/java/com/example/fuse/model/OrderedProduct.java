@@ -2,7 +2,9 @@ package com.example.fuse.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OrderedProduct {
+import java.io.Serializable;
+
+public class OrderedProduct implements Serializable {
 
   private final Product product;
   private final int quantity;
