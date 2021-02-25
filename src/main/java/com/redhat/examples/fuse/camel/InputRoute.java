@@ -59,6 +59,7 @@ public class InputRoute extends RouteBuilder {
     from("cxf:bean:responseEndpoint")
         .log("Received a response")
         .convertBodyTo(String.class)
+        .log("${body}")
         .inOnly("activemq:responses")
         .transform().constant("" +
         "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
