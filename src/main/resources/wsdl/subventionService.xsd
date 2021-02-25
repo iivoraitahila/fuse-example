@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3-b02-. -->
+<xs:schema xmlns:tns="http://service.filenet.subvention.p8.tieto.com" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           version="1.0" targetNamespace="http://service.filenet.subvention.p8.tieto.com">
+
+    <xs:complexType name="contactInformationDTO">
+        <xs:sequence>
+            <xs:element name="applicantType" type="xs:string" minOccurs="0"/>
+            <xs:element name="applicantTypeOther" type="xs:string" minOccurs="0"/>
+            <xs:element name="applicationYear" type="xs:int" minOccurs="0"/>
+            <xs:element name="bankOwnerHetu" type="xs:string" minOccurs="0"/>
+            <xs:element name="bankOwnerName" type="xs:string" minOccurs="0"/>
+            <xs:element name="dataPopulated" type="xs:boolean"/>
+            <xs:element name="email" type="xs:string" minOccurs="0"/>
+            <xs:element name="fax" type="xs:string" minOccurs="0"/>
+            <xs:element name="groupCount1" type="xs:int" minOccurs="0"/>
+            <xs:element name="groupCount2" type="xs:int" minOccurs="0"/>
+            <xs:element name="loadedOrganization" type="tns:organizationDTO" minOccurs="0"/>
+            <xs:element name="newCompany" type="xs:boolean"/>
+            <xs:element name="organization" type="tns:organizationDTO" minOccurs="0"/>
+            <xs:element name="privatePerson" type="tns:personContactDTO" minOccurs="0"/>
+            <xs:element name="projectName" type="xs:string" minOccurs="0"/>
+            <xs:element name="projectNumber" type="xs:int" minOccurs="0"/>
+            <xs:element name="selectedBankAccountsMap" type="xs:boolean" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="selectedEmployeesMap" type="xs:boolean" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="selectedPersonContactsMap" type="xs:boolean" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="termsAccepted" type="xs:boolean"/>
+            <xs:element name="webpages" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="organizationDTO">
+        <xs:sequence>
+            <xs:element name="registerNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="organizationCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="name" type="xs:string" minOccurs="0"/>
+            <xs:element name="abbreviation" type="xs:string" minOccurs="0"/>
+            <xs:element name="registerDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="registrationYear" type="xs:int" minOccurs="0"/>
+            <xs:element name="homeTown" type="xs:string" minOccurs="0"/>
+            <xs:element name="personName" type="xs:string" minOccurs="0"/>
+            <xs:element name="contactPersons" type="tns:personContactDTO" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="employees" type="tns:personContactDTO" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="bankAccounts" type="tns:bankAccountDTO" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="fax" type="xs:string" minOccurs="0"/>
+            <xs:element name="email" type="xs:string" minOccurs="0"/>
+            <xs:element name="webPages" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="personContactDTO">
+        <xs:sequence>
+            <xs:element name="address" type="xs:string" minOccurs="0"/>
+            <xs:element name="amount" type="xs:double" minOccurs="0"/>
+            <xs:element name="city" type="xs:string" minOccurs="0"/>
+            <xs:element name="count" type="xs:int" minOccurs="0"/>
+            <xs:element name="education" type="xs:string" minOccurs="0"/>
+            <xs:element name="email" type="xs:string" minOccurs="0"/>
+            <xs:element name="hetu" type="xs:string" minOccurs="0"/>
+            <xs:element name="homeTown" type="xs:string" minOccurs="0"/>
+            <xs:element name="name" type="xs:string" minOccurs="0"/>
+            <xs:element name="occupation" type="xs:string" minOccurs="0"/>
+            <xs:element name="phone" type="xs:string" minOccurs="0"/>
+            <xs:element name="postalCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="readOnlyWhenSaved" type="xs:boolean"/>
+            <xs:element name="role" type="xs:string" minOccurs="0"/>
+            <xs:element name="surname" type="xs:string" minOccurs="0"/>
+            <xs:element name="yearOfBirth" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="bankAccountDTO">
+        <xs:sequence>
+            <xs:element name="iban" type="xs:string" minOccurs="0"/>
+            <xs:element name="readOnlyWhenSaved" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="subvention">
+        <xs:sequence>
+            <xs:element name="applicantAndApplicationXml" type="xs:string" minOccurs="0"/>
+            <xs:element name="attachmentFileName" type="xs:string" minOccurs="0"/>
+            <xs:element name="attachmentDescription" type="xs:string" minOccurs="0"/>
+            <xs:element name="attachmentFiletype" type="xs:string" minOccurs="0"/>
+            <xs:element name="caseID" type="xs:string" minOccurs="0"/>
+            <xs:element name="message" type="tns:odsMessage" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="odsMessage">
+        <xs:sequence>
+            <xs:element name="body" type="xs:string" minOccurs="0"/>
+            <xs:element name="sendDateTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="sentBy" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="resultOfService">
+        <xs:sequence>
+            <xs:element name="caseID" type="xs:string" minOccurs="0"/>
+            <xs:element name="eventCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="eventDescription" type="xs:string" minOccurs="0"/>
+            <xs:element name="eventSource" type="xs:string" minOccurs="0"/>
+            <xs:element name="eventType" type="xs:string" minOccurs="0"/>
+            <xs:element name="xml" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
