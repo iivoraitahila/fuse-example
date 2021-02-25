@@ -39,6 +39,10 @@ public class InputRoute extends RouteBuilder {
         .outType(ApplicantAndApplication.class)
         .to("direct:place-order");
 
+    rest("/responses")
+        .post()
+        .to("direct:process-response");
+
     from("direct:place-order")
         .id("order-place")
         .streamCaching()
@@ -81,20 +85,26 @@ public class InputRoute extends RouteBuilder {
             .simple("${body.caseId} starts with 'avustusasiointi'")
             .log("Calling endpoint avustusasiointi")
             .marshal().json(JsonLibrary.Jackson)
+            .convertBodyTo(String.class) // just for visualization purposes
+            .inOnly("activemq:avustusasiointi-archive")
+
             .process(exchange -> {
               exchange.getOut().getHeaders().clear();
               exchange.getOut().setBody(exchange.getIn().getBody());
             })
             .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http.HttpMethods.POST))
-            .inOnly("https://enr550qtkpybcw4.m.pipedream.net")
-            .convertBodyTo(String.class) // just for visualization purposes
-            .inOnly("activemq:avustusasiointi-archive")
+            .inOnly("http://localhost:8180/api/responses")
         .otherwise()
             .log("Couldn't find the matching endpoint")
             .marshal().json(JsonLibrary.Jackson) // just for visualization purposes
             .convertBodyTo(String.class)
             .inOnly("activemq:unprocessed")
         .end()
+        .to("mock:result");
+
+    from("direct:process-response")
+        .log("Received a response")
+        .log("${body}")
         .to("mock:result");
 
   }
