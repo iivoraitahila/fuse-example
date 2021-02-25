@@ -1,9 +1,15 @@
 package com.redhat.examples.fuse.camel;
 
 import com.ibm.coh.ApplicantAndApplication;
+import com.ibm.odsservice.ODSServicePort;
+import com.ibm.odsservice.UpdateCitizenCaseStatusResponse;
 import com.redhat.examples.fuse.model.OrderRequest;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
+import org.apache.camel.dataformat.soap.SoapJaxbDataFormat;
+import org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -56,29 +62,37 @@ public class InputRoute extends RouteBuilder {
         .transform().constant("REJECTED")
         .to("mock:result");
 
+    SoapJaxbDataFormat soap = new SoapJaxbDataFormat("com.ibm.odsservice", new ServiceInterfaceStrategy(ODSServicePort.class, false));
+    UpdateCitizenCaseStatusResponse response = new UpdateCitizenCaseStatusResponse();
+    response.setUpdateCitizenCaseStatusReturn(1);
+
     from("cxf:bean:responseEndpoint")
         .log("Received a response")
-        .convertBodyTo(String.class)
+        .unmarshal(soap)
         .log("${body}")
-        .inOnly("activemq:responses")
-        .transform().constant("" +
-        "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
-        "   <soapenv:Header/>\n" +
-        "   <soapenv:Body>\n" +
-        "      <p574:updateCitizenCaseStatusResponse xmlns:p574=\"http://odsservice.ibm.com\">\n" +
-        "         <updateCitizenCaseStatusReturn>1</updateCitizenCaseStatusReturn>\n" +
-        "      </p574:updateCitizenCaseStatusResponse>\n" +
-        "   </soapenv:Body>\n" +
-        "</soapenv:Envelope>")
+        .to("activemq:responses")
+        .transform().constant(response)
+        .marshal(soap)
         .to("mock:result");
 
     from("activemq:responses")
         .choice()
           .when()
-            .xpath("starts-with(//caseId, 'avustusasiointi')")
+            .simple("${body.caseId} starts with 'avustusasiointi'")
             .log("Calling endpoint avustusasiointi")
+            .marshal().json(JsonLibrary.Jackson)
+            .process(exchange -> {
+              exchange.getOut().getHeaders().clear();
+              exchange.getOut().setBody(exchange.getIn().getBody());
+            })
+            .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http.HttpMethods.POST))
+            .inOnly("https://enr550qtkpybcw4.m.pipedream.net")
+            .convertBodyTo(String.class) // just for visualization purposes
             .inOnly("activemq:avustusasiointi-archive")
-          .otherwise()
+        .otherwise()
+            .log("Couldn't find the matching endpoint")
+            .marshal().json(JsonLibrary.Jackson) // just for visualization purposes
+            .convertBodyTo(String.class)
             .inOnly("activemq:unprocessed")
         .end()
         .to("mock:result");

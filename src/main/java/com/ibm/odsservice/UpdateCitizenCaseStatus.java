@@ -1,13 +1,9 @@
 
 package com.ibm.odsservice;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.Serializable;
 
 
 /**
@@ -54,7 +50,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "timeCreated"
 })
 @XmlRootElement(name = "updateCitizenCaseStatus")
-public class UpdateCitizenCaseStatus {
+public class UpdateCitizenCaseStatus implements Serializable {
 
     @XmlElement(required = true, nillable = true)
     protected String accessUserId;

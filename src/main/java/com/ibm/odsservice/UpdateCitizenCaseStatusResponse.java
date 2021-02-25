@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 
 /**
@@ -31,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
     "updateCitizenCaseStatusReturn"
 })
 @XmlRootElement(name = "updateCitizenCaseStatusResponse")
-public class UpdateCitizenCaseStatusResponse {
+public class UpdateCitizenCaseStatusResponse implements Serializable {
 
     protected int updateCitizenCaseStatusReturn;
 
