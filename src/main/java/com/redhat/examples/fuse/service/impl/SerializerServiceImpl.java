@@ -3,13 +3,7 @@ package com.redhat.examples.fuse.service.impl;
 import com.ibm.coh.ApplicantAndApplication;
 import com.ibm.coh.EServicesHeaderType;
 import com.ibm.coh.PortalUserType;
-import com.ibm.coh.applicantregistry.ws.data.ContactInformationDTO;
 import com.ibm.coh.avustus.data.GrantApplicationDTO;
-import com.ibm.coh.avustus.data.GrantDTO;
-import com.ibm.coh.avustus.data.SubsidiesDTO;
-import com.redhat.examples.fuse.model.*;
-import com.redhat.examples.fuse.service.DtoTransformerService;
-import com.redhat.examples.fuse.service.OrderService;
 import com.redhat.examples.fuse.service.SerializerService;
 
 import org.springframework.stereotype.Service;
@@ -17,16 +11,9 @@ import org.springframework.stereotype.Service;
 import java.beans.XMLEncoder;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service("serializerService")
 public class SerializerServiceImpl implements SerializerService {
-
-	//  private Map<Integer, Product> productsMap;
-//	private OrderRequest source;
 
 	public SerializerServiceImpl() {
 	}
@@ -41,18 +28,6 @@ public class SerializerServiceImpl implements SerializerService {
 				+ "</String></FormData></_xml:COHForm>";
 		
 		return result.replace("<", "&lt;").replace("\"", "&quot;");
-		
-		//TODO serialisoi headeri eri tavalla kuin payload?
-		//Headerissa < == &lt;
-		//payloadissa < == &amp;lt;
-		//gt ei enkoodata, gt on sallittua
-		//arvojen escapeukset?
-		
-		
-		
-//		System.out.println("SERIALIZING");
-//		System.out.println("SERIALIZED: " + application.getSubsidies().getGrantYear1());
-//		return "" + application.getSubsidies().getGrantYear1();
 	}
 
 	private String staticHeader() {

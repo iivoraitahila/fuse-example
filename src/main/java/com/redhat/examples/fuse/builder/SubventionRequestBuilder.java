@@ -27,10 +27,11 @@ public class SubventionRequestBuilder {
 	      System.out.println("Match not found");
 	    }
 		
+	    //The SOAP interface requires two parameters: subvention and attachment
 		ArrayList<Object> result = new ArrayList<Object>();
 		result.add(subvention);
-		byte[] koe = "koe".getBytes();
-		result.add(koe);
+		byte[] emptyAttachment = "".getBytes();
+		result.add(emptyAttachment);
 		return result;
 		
 	}

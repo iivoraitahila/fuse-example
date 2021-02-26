@@ -6,14 +6,14 @@ import fi.hel.avustus.json.Application;
 import fi.hel.avustus.json.Header;
 import fi.hel.avustus.json.User;
 
-public class OrderRequest {
+public class SubventionRequest {
 
 	private final Header header;
 	private final User user;
 	private final Application application;
 
 	@JsonCreator
-	public OrderRequest(
+	public SubventionRequest(
 			@JsonProperty("header") Header header,
 			@JsonProperty("user") User user,
 			@JsonProperty("application") Application application) {

@@ -3,7 +3,7 @@ package com.redhat.examples.fuse.camel;
 import com.ibm.coh.ApplicantAndApplication;
 import com.ibm.odsservice.ODSServicePort;
 import com.ibm.odsservice.UpdateCitizenCaseStatusResponse;
-import com.redhat.examples.fuse.model.OrderRequest;
+import com.redhat.examples.fuse.model.SubventionRequest;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
@@ -30,26 +30,25 @@ public class InputRoute extends RouteBuilder {
         .port(environment.getProperty("api.port", "8080"))
         .contextPath("/api");
 
-    rest("/orders").description("Orders")
+    rest("/subventions").description("Subventions")
         .consumes("application/json")
         .produces("application/json")
 
-        .post().description("Places an order")
-        .type(OrderRequest.class)
+        .post().description("Request a subvention")
+        .type(SubventionRequest.class)
         .outType(ApplicantAndApplication.class)
-        .to("direct:place-order");
+        .to("direct:save-application");
 
     rest("/responses")
         .post()
         .to("direct:process-response");
 
-    from("direct:place-order")
-        .id("order-place")
+    from("direct:save-application")
+        .id("application-save")
         .streamCaching()
         .to("bean:dtoTransformerService?method=transform")
         .to("bean:serializerService?method=serialize")
-        //.bean(SubventionRequestBuilder.class)
-        .errorHandler(deadLetterChannel("activemq:failures"))
+        .errorHandler(deadLetterChannel("activemq:failures")) // TODO: aiheuttaa lisävirheen
         .to("bean:subventionRequestBuilder?method=createSubvention")
         .setHeader(CxfConstants.OPERATION_NAME, constant("saveApplication"))
         .setHeader(CxfConstants.OPERATION_NAMESPACE, constant("http://service.filenet.subvention.p8.tieto.com"))
