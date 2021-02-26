@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class File {
 
     @JsonProperty("description")
-    private Object description;
+    private String description;
     @JsonProperty("fileType")
     private Integer fileType;
     @JsonProperty("required")
@@ -31,12 +31,12 @@ public class File {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("description")
-    public Object getDescription() {
+    public String getDescription() {
         return description;
     }
 
     @JsonProperty("description")
-    public void setDescription(Object description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

@@ -61,7 +61,7 @@ public class InputRoute extends RouteBuilder {
 //        .to("mock:result");
 
     from("direct:rejected")
-        .log("I don't like Marcelo")
+        .log("rejected")
         .transform().constant("REJECTED")
         .to("mock:result");
 
@@ -92,7 +92,7 @@ public class InputRoute extends RouteBuilder {
               exchange.getOut().setBody(exchange.getIn().getBody());
             })
             .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http.HttpMethods.POST))
-            .inOnly("http://localhost:8180/api/responses")
+            .inOnly("http://drupal-avustusasiointi-fuse-example.apps.arodevtest.hel.fi/api/")
         .otherwise()
             .log("Couldn't find the matching endpoint")
             .marshal().json(JsonLibrary.Jackson) // just for visualization purposes
