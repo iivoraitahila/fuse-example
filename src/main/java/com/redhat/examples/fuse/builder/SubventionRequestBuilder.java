@@ -12,6 +12,7 @@ public class SubventionRequestBuilder {
 
 	public ArrayList<Object> createSubvention(String application) {
 		Subvention subvention = new Subvention();
+		System.out.println("XML String to be sent:\n"+application);
 		subvention.setApplicantAndApplicationXml(application);
 		subvention.setAttachmentDescription(null);
 		subvention.setAttachmentFileName(null);

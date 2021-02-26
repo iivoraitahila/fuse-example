@@ -48,7 +48,7 @@ public class InputRoute extends RouteBuilder {
         .streamCaching()
         .to("bean:dtoTransformerService?method=transform")
         .to("bean:serializerService?method=serialize")
-        .errorHandler(deadLetterChannel("activemq:failures")) // TODO: aiheuttaa lisävirheen
+        //.errorHandler(deadLetterChannel("activemq:failures")) // TODO: aiheuttaa lisävirheen
         .to("bean:subventionRequestBuilder?method=createSubvention")
         .setHeader(CxfConstants.OPERATION_NAME, constant("saveApplication"))
         .setHeader(CxfConstants.OPERATION_NAMESPACE, constant("http://service.filenet.subvention.p8.tieto.com"))

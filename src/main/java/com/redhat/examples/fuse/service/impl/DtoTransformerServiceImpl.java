@@ -72,10 +72,17 @@ public class DtoTransformerServiceImpl implements DtoTransformerService {
 			FileAttachmentDTO fDto = new FileAttachmentDTO();
 			// bymail
 			fDto.setDescription(f.getDescription());
-			fDto.setDescriptionEditable(f.getDescriptionEditable());
+			if (f.getDescriptionEditable()!=null) {
+				fDto.setDescriptionEditable(f.getDescriptionEditable());
+			}
 			//fDto.setFileName(f.getfileName());
-			fDto.setFileType(f.getFileType());
-			fDto.setRequired(f.getRequired());
+			fDto.setFileType(f.getFileType() != null ? f.getFileType() : 0);
+			if (f.getRequired()!=null) {
+				fDto.setRequired(f.getRequired());
+			}
+			else {
+				fDto.setRequired(false);
+			}
 			fDtos.add(fDto);
 		}
 		attDto.setFiles(fDtos);
