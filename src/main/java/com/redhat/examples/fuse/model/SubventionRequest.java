@@ -20,7 +20,7 @@ public class SubventionRequest {
 		this.header = header;
 		this.user = user;
 		this.application = application;
-		System.out.println("MOI " + user.getFirstName());
+		//System.out.println("MOI " + user.getFirstName());
 	}
 
 	public Header getHeader() {
