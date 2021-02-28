@@ -3,6 +3,7 @@ package com.redhat.examples.fuse.service.impl;
 import com.ibm.coh.ApplicantAndApplication;
 import com.ibm.coh.EServicesHeaderType;
 import com.ibm.coh.PortalUserType;
+import com.ibm.coh.applicantregistry.ws.data.BankAccountDTO;
 import com.ibm.coh.applicantregistry.ws.data.ContactInformationDTO;
 import com.ibm.coh.applicantregistry.ws.data.OrganizationDTO;
 import com.ibm.coh.applicantregistry.ws.data.PersonContactDTO;
@@ -70,7 +71,8 @@ public class DtoTransformerServiceImpl implements DtoTransformerService {
 		List<FileAttachmentDTO> fDtos = new ArrayList<FileAttachmentDTO>();
 		for (File f : orderRequest.getApplication().getAttachments().getFiles()) {
 			FileAttachmentDTO fDto = new FileAttachmentDTO();
-			// bymail
+			// bymail set to true because no attachment integration yet
+			fDto.setByMail(true);
 			fDto.setDescription(f.getDescription());
 			if (f.getDescriptionEditable()!=null) {
 				fDto.setDescriptionEditable(f.getDescriptionEditable());
@@ -107,15 +109,73 @@ public class DtoTransformerServiceImpl implements DtoTransformerService {
 		ContactInformationDTO cDto = new ContactInformationDTO();
 		ContactInformation c = orderRequest.getApplication().getContactInformation();
 		cDto.setApplicationYear(c.getApplicationYear());
-		// td
+		cDto.setNewCompany(c.getNewCompany()!=null ? c.getNewCompany() : false);
 		OrganizationDTO oDto = new OrganizationDTO();
-		Organization o = new Organization();
+		Organization o = orderRequest.getApplication().getContactInformation().getOrganization();
 		oDto.setAbbreviation(o.getAbbreviation());
-		// td
+		List<BankAccountDTO> baDtos = new ArrayList<BankAccountDTO>();
+		boolean[] selectedBa = new boolean[o.getBankAccounts().size()];
+		int count = 0;
+		for (BankAccount ba : o.getBankAccounts()) {
+			BankAccountDTO baDto = new BankAccountDTO();
+			baDto.setIban(ba.getIban());
+			baDtos.add(baDto);
+			selectedBa[count] = ba.getSelected() != null ? ba.getSelected() : false;
+			count++;
+		}
+		oDto.setBankAccounts(baDtos);
+		List<PersonContactDTO> pcDtos = new ArrayList<PersonContactDTO>();
+		boolean[] selectedPc = new boolean[o.getContactPersons().size()];
+		count = 0;
+		for (ContactPerson pc : o.getContactPersons()) {
+			PersonContactDTO pcDto = new PersonContactDTO();
+			pcDto.setAddress(pc.getAddress());
+			pcDto.setCity(pc.getCity());
+			pcDto.setName(pc.getName());
+			pcDto.setPostalCode(pc.getPostalCode());
+			pcDtos.add(pcDto);
+			selectedPc[count] = pc.getSelected() != null ? pc.getSelected() : false;
+			count++;
+		}
+		oDto.setContactPersons(pcDtos);
+		oDto.setEmail(o.getEmail());
+		List<PersonContactDTO> empDtos = new ArrayList<PersonContactDTO>();
+		boolean[] selectedEm = new boolean[o.getEmployees().size()];
+		count = 0;
+		for (Employee pc : o.getEmployees()) {
+			PersonContactDTO pcDto = new PersonContactDTO();
+			pcDto.setEmail(pc.getEmail());
+			pcDto.setName(pc.getName());
+			pcDto.setPhone(pc.getPhone());
+			empDtos.add(pcDto);
+			selectedEm[count] = pc.getSelected() != null ? pc.getSelected() : false;
+			count++;
+		}
+		oDto.setEmployees(empDtos);
+		oDto.setHomeTown(o.getHomeTown());
+		oDto.setName(o.getName());
+		oDto.setOrganizationCode(o.getOrganizationCode());
+		// format based on draft example message, to be verified
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss:SS'Z'");
+		Date regDate = null;
+		try {
+			regDate = format.parse(o.getRegisterDate());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		oDto.setRegisterDate(regDate);
+		oDto.setRegistrationYear(o.getRegistrationYear());
+		oDto.setWebPages(o.getWebPages());
 		cDto.setOrganization(oDto);
+		cDto.setSelectedBankAccountsMap(selectedBa);
+		cDto.setSelectedEmployeesMap(selectedEm);
+		cDto.setSelectedPersonContactsMap(selectedPc);
+		// assumed that cannot be sent without accepting terms
+		cDto.setTermsAccepted(true);
 		PersonContactDTO priv = new PersonContactDTO();
 		priv.setReadOnlyWhenSaved(orderRequest.getApplication().getContactInformation().getPrivatePerson().getReadOnlyWhenSaved());
 		cDto.setPrivatePerson(priv);
+		grant.setContactInformation(cDto);
 		
 		return target;
 	}
