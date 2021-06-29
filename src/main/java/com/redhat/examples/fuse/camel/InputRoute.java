@@ -79,28 +79,28 @@ public class InputRoute extends RouteBuilder {
         .marshal(soap)
         .to("mock:result");
 
-//    from("activemq:responses")
-//        .choice()
-//          .when()
-//            .simple("${body.caseId} starts with 'avustusasiointi'")
-//            .log("Calling endpoint avustusasiointi")
-//            .marshal().json(JsonLibrary.Jackson)
-//            .convertBodyTo(String.class) // just for visualization purposes
-//            .inOnly("activemq:avustusasiointi-archive")
-//
-//            .process(exchange -> {
-//              exchange.getOut().getHeaders().clear();
-//              exchange.getOut().setBody(exchange.getIn().getBody());
-//            })
-//            .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http.HttpMethods.POST))
-//            .inOnly("http://drupal-avustusasiointi-fuse-example.apps.arodevtest.hel.fi/api/")
-//        .otherwise()
-//            .log("Couldn't find the matching endpoint")
-//            .marshal().json(JsonLibrary.Jackson) // just for visualization purposes
-//            .convertBodyTo(String.class)
-//            .inOnly("activemq:unprocessed")
-//        .end()
-//        .to("mock:result");
+    from("activemq:responses")
+        .choice()
+          .when()
+            .simple("${body.caseId} starts with 'avustusasiointi'")
+            .log("Calling endpoint avustusasiointi")
+            .marshal().json(JsonLibrary.Jackson)
+            .convertBodyTo(String.class) // just for visualization purposes
+            .inOnly("activemq:avustusasiointi-archive")
+
+            .process(exchange -> {
+              exchange.getOut().getHeaders().clear();
+              exchange.getOut().setBody(exchange.getIn().getBody());
+            })
+            .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http.HttpMethods.POST))
+            .inOnly("http://drupal-avustusasiointi-fuse-example.apps.arodevtest.hel.fi/api/")
+        .otherwise()
+            .log("Couldn't find the matching endpoint")
+            .marshal().json(JsonLibrary.Jackson) // just for visualization purposes
+            .convertBodyTo(String.class)
+            .inOnly("activemq:unprocessed")
+        .end()
+        .to("mock:result");
 
     from("direct:process-response")
         .log("Received a response")
