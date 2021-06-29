@@ -75,7 +75,7 @@
     <server>
       <id>github</id>
       <username>iivo.raitahila</username>
-      <password>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</password> <!-- GitHub packages read only PAT -->
+      <password>${github.token}</password>
     </server>
   </servers>
   
