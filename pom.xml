@@ -135,6 +135,12 @@
             <artifactId>camel-test-spring</artifactId>
             <scope>test</scope>
         </dependency>
+             
+        <dependency>
+           <groupId>koe</groupId>
+           <artifactId>esimerkki</artifactId>
+           <version>0.0.1-SNAPSHOT</version>
+         </dependency> 
     </dependencies>
 
     <build>
