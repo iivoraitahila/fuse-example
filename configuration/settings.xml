@@ -12,6 +12,13 @@
       <id>github</id>
       <repositories>
         
+        
+
+        <repository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2</url>
+        </repository>
+
         <repository>
           <id>github</id>
           <url>https://maven.pkg.github.com/iivoraitahila/*</url>
@@ -19,13 +26,46 @@
             <enabled>true</enabled>
           </snapshots>
         </repository>
-
+        
+        
         <repository>
-          <id>central</id>
-          <url>https://repo1.maven.org/maven2</url>
+                              
+          
+          <id>redhat-ga-repository</id>
+                              
+          
+          <name>Red Hat GA repository</name>
+                              
+          
+          <url>http://maven.repository.redhat.com/ga/</url>
+                              
+          
+          <releases>
+                                    
+            
+            <enabled>true</enabled>
+                                    
+            
+            <updatePolicy>never</updatePolicy>
+                                  
+          
+          </releases>
+                              
+          
+          <snapshots>
+                                    
+            
+            <enabled>false</enabled>
+                                    
+            
+            <updatePolicy>daily</updatePolicy>
+                                  
+          
+          </snapshots>
+                            
+        
         </repository>
-
-
+        
 
       </repositories>
     </profile>
